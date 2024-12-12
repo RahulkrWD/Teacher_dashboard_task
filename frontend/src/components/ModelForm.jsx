@@ -36,7 +36,7 @@ function ModalForm({ show, onHide, studentData, onSubmit, isUpdate }) {
     try {
       if (isUpdate) {
         await axios.put(
-          `http://localhost:5000/api/students/${student._id}`,
+          `https://teacher-dashboard-task-z9nd.vercel.app/api/students/${student._id}`,
           student
         );
 
@@ -44,7 +44,7 @@ function ModalForm({ show, onHide, studentData, onSubmit, isUpdate }) {
         onHide();
       } else {
         const res = await axios.post(
-          "http://localhost:5000/api/students",
+          "https://teacher-dashboard-task-z9nd.vercel.app/api/students",
           student
         );
         if (res.data.success) {

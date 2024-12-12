@@ -13,7 +13,9 @@ function Dashboard() {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/students");
+        const response = await axios.get(
+          "https://teacher-dashboard-task-z9nd.vercel.app/api/students"
+        );
         setStudents(response.data.student);
       } catch (error) {
         console.error("Error fetching students", error);
@@ -37,7 +39,9 @@ function Dashboard() {
 
   const handleDeleteStudent = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/students/${id}`);
+      await axios.delete(
+        `https://teacher-dashboard-task-z9nd.vercel.app/api/students/${id}`
+      );
       setStudents(students.filter((student) => student._id !== id));
     } catch (error) {
       console.error("Error deleting student", error);
@@ -47,9 +51,12 @@ function Dashboard() {
   const handleStatus = async (id, currentStatus) => {
     try {
       const newStatus = currentStatus === "Present" ? "Absent" : "Present";
-      await axios.put(`http://localhost:5000/api/students/${id}`, {
-        status: newStatus,
-      });
+      await axios.put(
+        `https://teacher-dashboard-task-z9nd.vercel.app/api/students/${id}`,
+        {
+          status: newStatus,
+        }
+      );
       setStudents(
         students.map((student) =>
           student._id === id ? { ...student, status: newStatus } : student
@@ -63,7 +70,7 @@ function Dashboard() {
   const handleModalSubmit = () => {
     setShowModal(false);
     axios
-      .get("http://localhost:5000/api/students")
+      .get("https://teacher-dashboard-task-z9nd.vercel.app/api/students")
       .then((response) => setStudents(response.data.student))
       .catch((error) => console.error("Error fetching students", error));
   };
