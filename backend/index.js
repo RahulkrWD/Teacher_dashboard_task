@@ -9,6 +9,9 @@ app.use(bodyParser.json());
 database();
 app.use(cors());
 app.use(express.json());
+app.get("/", (req, res) => {
+  res.send("Home page");
+});
 app.use("/api", routes);
 
 const PORT = 5000;
