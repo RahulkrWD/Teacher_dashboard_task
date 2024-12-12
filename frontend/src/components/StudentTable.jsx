@@ -1,9 +1,12 @@
 import React from "react";
 import { Table, Button, Alert } from "react-bootstrap";
+import Loading from "./Loading";
 
-function StudentTable({ students, onEdit, onDelete, onStatus }) {
+function StudentTable({ students, onEdit, onDelete, onStatus, isLoading }) {
   return (
     <>
+      {isLoading && <Loading />}
+
       {students.length === 0 ? (
         <center>
           <Alert variant="info">No data found</Alert>

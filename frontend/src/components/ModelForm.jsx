@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
+import Loading from "./Loading";
 
 function ModalForm({ show, onHide, studentData, onSubmit, isUpdate }) {
+  const [isLoading, setIsLoading] = useState(false);
   const [student, setStudent] = useState({
     name: "",
     email: "",
@@ -35,6 +37,7 @@ function ModalForm({ show, onHide, studentData, onSubmit, isUpdate }) {
     e.preventDefault();
     try {
       if (isUpdate) {
+        setIsLoading(true);
         await axios.put(
           `https://teacher-dashboard-task-z9nd.vercel.app/api/students/${student._id}`,
           student
@@ -42,7 +45,9 @@ function ModalForm({ show, onHide, studentData, onSubmit, isUpdate }) {
 
         onSubmit();
         onHide();
+        setIsLoading(false);
       } else {
+        setIsLoading(true);
         const res = await axios.post(
           "https://teacher-dashboard-task-z9nd.vercel.app/api/students",
           student
@@ -50,7 +55,9 @@ function ModalForm({ show, onHide, studentData, onSubmit, isUpdate }) {
         if (res.data.success) {
           onSubmit();
           onHide();
+          setIsLoading(false);
         } else {
+          setIsLoading(false);
           alert("User alread exist");
         }
       }
@@ -60,66 +67,71 @@ function ModalForm({ show, onHide, studentData, onSubmit, isUpdate }) {
   };
 
   return (
-    <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
-        <Modal.Title>{isUpdate ? "Update Student" : "Add Student"}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter student name"
-              name="name"
-              value={student.name}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+    <>
+      {isLoading && <Loading />}
+      <Modal show={show} onHide={onHide}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {isUpdate ? "Update Student" : "Add Student"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="name">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter student name"
+                name="name"
+                value={student.name}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
 
-          <Form.Group controlId="email">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter student email"
-              name="email"
-              value={student.email}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+            <Form.Group controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter student email"
+                name="email"
+                value={student.email}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
 
-          <Form.Group controlId="address">
-            <Form.Label>Address</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter student address"
-              name="address"
-              value={student.address}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+            <Form.Group controlId="address">
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter student address"
+                name="address"
+                value={student.address}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
 
-          <Form.Group controlId="mobile">
-            <Form.Label>Mobile</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter student mobile"
-              name="mobile"
-              value={student.mobile}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+            <Form.Group controlId="mobile">
+              <Form.Label>Mobile</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter student mobile"
+                name="mobile"
+                value={student.mobile}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
 
-          <Button className="mt-3" variant="primary" type="submit">
-            {isUpdate ? "Update Student" : "Create Student"}
-          </Button>
-        </Form>
-      </Modal.Body>
-    </Modal>
+            <Button className="mt-3" variant="primary" type="submit">
+              {isUpdate ? "Update Student" : "Create Student"}
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 }
 

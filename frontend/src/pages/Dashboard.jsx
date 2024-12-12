@@ -9,16 +9,20 @@ function Dashboard() {
   const [showModal, setShowModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchStudents = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get(
           "https://teacher-dashboard-task-z9nd.vercel.app/api/students"
         );
         setStudents(response.data.student);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching students", error);
+        setIsLoading(false);
       }
     };
 
@@ -39,17 +43,21 @@ function Dashboard() {
 
   const handleDeleteStudent = async (id) => {
     try {
+      setIsLoading(true);
       await axios.delete(
         `https://teacher-dashboard-task-z9nd.vercel.app/api/students/${id}`
       );
       setStudents(students.filter((student) => student._id !== id));
     } catch (error) {
       console.error("Error deleting student", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleStatus = async (id, currentStatus) => {
     try {
+      setIsLoading(true);
       const newStatus = currentStatus === "Present" ? "Absent" : "Present";
       await axios.put(
         `https://teacher-dashboard-task-z9nd.vercel.app/api/students/${id}`,
@@ -62,6 +70,7 @@ function Dashboard() {
           student._id === id ? { ...student, status: newStatus } : student
         )
       );
+      setIsLoading(false);
     } catch (error) {
       console.error("Error updating status", error);
     }
@@ -95,6 +104,7 @@ function Dashboard() {
         onEdit={handleEditStudent}
         onDelete={handleDeleteStudent}
         onStatus={handleStatus}
+        isLoading={isLoading}
       />
       <ModalForm
         show={showModal}
