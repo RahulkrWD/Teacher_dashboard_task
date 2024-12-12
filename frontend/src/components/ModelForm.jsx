@@ -39,7 +39,7 @@ function ModalForm({ show, onHide, studentData, onSubmit, isUpdate }) {
       if (isUpdate) {
         setIsLoading(true);
         await axios.put(
-          `https://teacher-dashboard-task-z9nd.vercel.app/api/students/${student._id}`,
+          `${import.meta.env.VITE_API_URL}/api/students/${student._id}`,
           student
         );
 
@@ -49,7 +49,7 @@ function ModalForm({ show, onHide, studentData, onSubmit, isUpdate }) {
       } else {
         setIsLoading(true);
         const res = await axios.post(
-          "https://teacher-dashboard-task-z9nd.vercel.app/api/students",
+          `${import.meta.env.VITE_API_URL}/api/students`,
           student
         );
         if (res.data.success) {
